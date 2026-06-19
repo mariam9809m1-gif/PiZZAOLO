@@ -24,6 +24,7 @@ import Menu from './components/Menu';
 import CartDrawer from './components/CartDrawer';
 import OrderDashboard from './components/OrderDashboard';
 import AuthModal from './components/AuthModal';
+import { STATIC_MENU_PRESETS, STATIC_TOPPINGS } from './data';
 
 export default function App() {
   // Global States
@@ -31,8 +32,8 @@ export default function App() {
   
   // Cart, Orders & Catalogues
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
-  const [toppingsCatalog, setToppingsCatalog] = useState<Topping[]>([]);
-  const [presetPizzas, setPresetPizzas] = useState<PresetPizza[]>([]);
+  const [toppingsCatalog, setToppingsCatalog] = useState<Topping[]>(STATIC_TOPPINGS);
+  const [presetPizzas, setPresetPizzas] = useState<PresetPizza[]>(STATIC_MENU_PRESETS);
   const [orders, setOrders] = useState<Order[]>([]);
 
   // User Authentication
