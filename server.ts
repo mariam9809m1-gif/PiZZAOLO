@@ -109,7 +109,7 @@ const MENU_PRESETS: PresetPizza[] = [
     description: 'Sautéed sweet fennel Italian sausage crumbles, fire-roasted red bell peppers, caramelized sweet red onions, kalamata olives, and fresh hand-shaved Parmigiano-Reggiano.',
     category: 'Classic',
     basePrice: 15.49,
-    image: 'https://images.unsplash.com/photo-1594007654729-407edd1a22ca?auto=format&fit=crop&q=80&w=600',
+    image: 'https://images.unsplash.com/photo-1534308983496-4fabb1a015ee?w=500',
     defaultSize: 'Medium',
     defaultCrust: 'Artisanal Neapolitan',
     defaultSauce: 'Rustic Marinara',

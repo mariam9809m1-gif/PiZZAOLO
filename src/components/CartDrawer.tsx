@@ -46,8 +46,6 @@ export default function CartDrawer({
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  if (!isOpen) return null;
-
   // Sync details if currentUser gets logged initializers mid-session
   React.useEffect(() => {
     if (currentUser) {
@@ -61,8 +59,11 @@ export default function CartDrawer({
     }
   }, [currentUser]);
 
-  // Math Calculations
-  const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  if (!isOpen) return null;
+
+  // Path/Math Calculations safely guarded with defensive defaults and optional chaining
+  const safeCartItems = cartItems || [];
+  const subtotal = safeCartItems.reduce((sum, item) => sum + ((item?.price || 0) * (item?.quantity || 0)), 0);
   const tax = subtotal * 0.085; // 8.5%
   const deliveryFee = deliveryMethod === 'delivery' ? 3.99 : 0;
   const total = subtotal + tax + deliveryFee;
@@ -99,12 +100,12 @@ export default function CartDrawer({
             ...customerDetails,
             address: deliveryMethod === 'pickup' ? 'Store Pickup (Naples Yard 1A)' : customerDetails.address
           },
-          items: cartItems,
+          items: safeCartItems,
           subtotal: Number(subtotal.toFixed(2)),
           tax: Number(tax.toFixed(2)),
           deliveryFee: Number(deliveryFee.toFixed(2)),
           total: Number(total.toFixed(2)),
-          paymentToken: 'tok_mock_' + Math.random().toString(36).substr(5)
+          paymentToken: 'tok_mock_' + Math.random().toString(36).slice(2, 9)
         })
       });
 
@@ -125,14 +126,17 @@ export default function CartDrawer({
   };
 
   const getPizzaDescription = (item: CartItem) => {
+    if (!item) return 'Artisanal Pizza';
     if (!item.isCustom) {
-      return `${item.presetPizza?.name} (${item.customPizza?.size || 'Medium'})`;
+      return `${item.presetPizza?.name || 'Recipe Pizza'} (${item.customPizza?.size || 'Medium'})`;
     }
-    const pizza = item.customPizza!;
-    const toppingsStr = pizza.toppings.length > 0 
-      ? `Toppings: ${pizza.toppings.length} selected`
+    const pizza = item.customPizza;
+    if (!pizza) return 'Custom Masterpiece';
+    const toppings = pizza.toppings || [];
+    const toppingsStr = toppings.length > 0 
+      ? `Toppings: ${toppings.length} selected`
       : 'No toppings chosen';
-    return `Custom Base: ${pizza.size}, ${pizza.crust}, ${pizza.sauce} (${toppingsStr})`;
+    return `Custom Base: ${pizza.size || 'Medium'}, ${pizza.crust || 'Classic Thin'}, ${pizza.sauce || 'Rustic Marinara'} (${toppingsStr})`;
   };
 
   return (
@@ -174,7 +178,7 @@ export default function CartDrawer({
             {/* Cart step panel */}
             {step === 'cart' && (
               <div className="h-full flex flex-col justify-between">
-                {cartItems.length === 0 ? (
+                {safeCartItems.length === 0 ? (
                   <div className="flex-1 flex flex-col items-center justify-center text-center py-12">
                     <div className="w-16 h-16 rounded-full bg-amber-50 flex items-center justify-center mb-4">
                       <ShoppingCart className="w-8 h-8 text-amber-600" />
@@ -188,9 +192,9 @@ export default function CartDrawer({
                   <div className="space-y-6">
                     {/* Items List */}
                     <div className="space-y-4">
-                      {cartItems.map((item) => (
+                      {safeCartItems.map((item) => (
                         <div 
-                          key={item.cartId}
+                          key={item?.cartId || Math.random().toString()}
                           className="flex items-start gap-4 pb-4 border-b border-gray-50 text-left"
                         >
                           <div className="w-12 h-12 bg-slate-50 border border-gray-100 rounded-xl flex items-center justify-center text-xl shrink-0">
@@ -202,30 +206,30 @@ export default function CartDrawer({
                               {getPizzaDescription(item)}
                             </h4>
                             <span className="text-[10px] font-mono font-semibold text-amber-700 mt-1 block">
-                              ${item.price.toFixed(2)} each
+                              ${(item?.price || 0).toFixed(2)} each
                             </span>
                           </div>
 
                           <div className="flex items-center gap-2">
                             <div className="flex items-center gap-1 bg-gray-100 p-1 rounded-lg">
                               <button 
-                                onClick={() => onUpdateQuantity(item.cartId, -1)}
+                                onClick={() => item?.cartId && onUpdateQuantity(item.cartId, -1)}
                                 className="w-5 h-5 flex items-center justify-center text-xs font-bold text-gray-500 hover:text-black hover:bg-white rounded-md cursor-pointer"
                               >
                                 -
                               </button>
                               <span className="w-6 text-center text-xs font-mono font-bold text-gray-800">
-                                {item.quantity}
+                                {item?.quantity || 1}
                               </span>
                               <button 
-                                onClick={() => onUpdateQuantity(item.cartId, 1)}
+                                onClick={() => item?.cartId && onUpdateQuantity(item.cartId, 1)}
                                 className="w-5 h-5 flex items-center justify-center text-xs font-bold text-gray-500 hover:text-black hover:bg-white rounded-md cursor-pointer"
                               >
                                 +
                               </button>
                             </div>
                             <button 
-                              onClick={() => onRemoveItem(item.cartId)}
+                              onClick={() => item?.cartId && onRemoveItem(item.cartId)}
                               className="p-1 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 transition-all cursor-pointer"
                             >
                               <Trash2 className="w-4 h-4" />
@@ -451,7 +455,7 @@ export default function CartDrawer({
           </div>
 
           {/* Fixed Drawer Footer (Sums summary in Cart tab) */}
-          {step === 'cart' && cartItems.length > 0 && (
+          {step === 'cart' && safeCartItems.length > 0 && (
             <div className="p-6 border-t border-gray-100 bg-gray-50 space-y-4">
               <div className="space-y-1.5 text-xs text-gray-500 font-mono">
                 <div className="flex items-center justify-between">
