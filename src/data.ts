@@ -77,6 +77,30 @@ export const STATIC_MENU_PRESETS: PresetPizza[] = [
     defaultCrust: 'Artisanal Neapolitan',
     defaultSauce: 'Rustic Marinara',
     defaultToppings: ['t_olives', 't_spinach']
+  },
+  {
+    id: '7',
+    name: 'Quattro Formaggi Bianca',
+    description: 'A luxurious white blend of premium buffalo mozzarella, sharp gorgonzola blue cheese, creamy goat cheese, and shaved parmigiano-reggiano, finished with a subtle hint of wildflower organic honey.',
+    category: 'Vegetarian',
+    basePrice: 14.99,
+    image: 'https://images.unsplash.com/photo-1573821663912-569905455b1c?auto=format&fit=crop&q=80&w=600',
+    defaultSize: 'Medium',
+    defaultCrust: 'Classic Thin',
+    defaultSauce: 'White Garlic Cream',
+    defaultToppings: ['t_mozzarella', 't_gorgonzola', 't_parmigiano']
+  },
+  {
+    id: '8',
+    name: 'Salsiccia Calabrese Pepper',
+    description: 'Sautéed sweet fennel Italian sausage crumbles, fire-roasted red bell peppers, caramelized sweet red onions, kalamata olives, and fresh hand-shaved Parmigiano-Reggiano.',
+    category: 'Classic',
+    basePrice: 15.49,
+    image: 'https://images.unsplash.com/photo-1594007654729-407edd1a22ca?auto=format&fit=crop&q=80&w=600',
+    defaultSize: 'Medium',
+    defaultCrust: 'Artisanal Neapolitan',
+    defaultSauce: 'Rustic Marinara',
+    defaultToppings: ['t_mozzarella', 't_sausage', 't_bell_peppers', 't_onions']
   }
 ];
 
