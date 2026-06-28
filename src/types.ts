@@ -29,13 +29,14 @@ export interface PresetPizza {
   id: string;
   name: string;
   description: string;
-  category: 'Classic' | 'Premium' | 'Vegan' | 'Vegetarian';
+  category: 'Classic' | 'Specialty' | 'Vegetarian' | 'Sides' | 'Drinks' | 'Premium' | 'Vegan';
   basePrice: number;
   image: string;
   defaultSize: PizzaSize;
   defaultCrust: string;
   defaultSauce: string;
   defaultToppings: string[]; // Topping IDs
+  isPopular?: boolean;
 }
 
 export interface CustomPizza {

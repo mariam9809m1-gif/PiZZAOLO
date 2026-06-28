@@ -136,7 +136,7 @@ export default function Menu({ presetPizzas, onOrderPreset }: MenuProps) {
           
           {/* Menu categories navigation */}
           <div className="flex items-center gap-1.5 overflow-x-auto pb-1 max-w-full">
-            {(['All', 'Classic', 'Premium', 'Vegan', 'Vegetarian'] as const).map(cat => (
+            {(['All', 'Classic', 'Specialty', 'Vegetarian', 'Sides', 'Drinks'] as const).map(cat => (
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
@@ -170,6 +170,10 @@ export default function Menu({ presetPizzas, onOrderPreset }: MenuProps) {
                     alt={pizza.name}
                     className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
                     referrerPolicy="no-referrer"
+                    onError={(e) => {
+                      (e.currentTarget as HTMLImageElement).src = "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&h=300&fit=crop";
+                      (e.currentTarget as HTMLImageElement).onerror = null;
+                    }}
                   />
                   <div className="absolute top-3 left-3">
                     <span className="text-[10px] font-display font-extrabold text-white bg-slate-900/80 px-2.5 py-1 rounded-full backdrop-blur-sm">
